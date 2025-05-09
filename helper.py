@@ -19,6 +19,8 @@ def compute_derivatives(x, l):
     dL_dx0 = sp.diff(L_func, x[0])
     dL_dx1 = sp.diff(L_func, x[1])
     dL_dl = sp.diff(L_func, l)
+
+    
     return dL_dx0, dL_dx1, dL_dl
 
 
@@ -27,6 +29,7 @@ def modify_derivatives(dL_dx0, dL_dx1, dL_dl, v, z, w):
     modified_dL_dx0 = dL_dx0 - v[0] + z[0]
     modified_dL_dx1 = dL_dx1 - v[1] + z[1]
     modified_dL_dl = dL_dl + w
+    
     return modified_dL_dx0, modified_dL_dx1, modified_dL_dl
 
 def modify_and_sum_derivatives(modified_dL_dx0, modified_dL_dx1):
@@ -35,6 +38,7 @@ def modify_and_sum_derivatives(modified_dL_dx0, modified_dL_dx1):
     modified_dL_dx1_with_sign = -modified_dL_dx1.subs({z[0]: 0, z[1]: 0})
     
     result = modified_dL_dx0_with_sign + modified_dL_dx1_with_sign
+    
     return result
 
 def calculate_modified_sum_of_derivatives():
@@ -53,6 +57,7 @@ def reorder_coefficients(expression):
     """Правильный порядок с изменением знаков, если нужно"""
     expression = expression.replace(' ', '')
     t=True
+
     terms = re.findall(r'[+-]?[\d]*\.?[\d]+\*?[a-zA-Z]+(?:\^?\d*)?|[+-]?[a-zA-Z]+\d*|[+-]?[\d]*\.?[\d]+', expression)
 
     constants = []
@@ -103,6 +108,8 @@ def reorder_coefficients(expression):
         else: 
             if term.startswith('-'):
                 term = '+' + term[1:]
+            # else:
+            #     term = '-' + term
             constants.append(term)
 
     ordered_coeffs = [0] * 9
@@ -123,6 +130,7 @@ def extract_all_values(polynomial):
     if isinstance(polynomial, list):
         polynomial = ''.join(polynomial)
     terms = re.findall(r'[+-]?[\d]*\.?[\d]*\*?[a-zA-Z]?\^?\d*', polynomial)
+
     all_values = []
 
     for term in terms:
@@ -150,6 +158,7 @@ def vect():
     str_f = str(calculate_modified_sum_of_derivatives())
     order = reorder_coefficients(str_f)
     coeff = extract_all_values(order)
+
     return coeff
 
 def extract_and_modify2():
